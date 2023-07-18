@@ -30,11 +30,13 @@ def create_item():
         "price" not in item_data):
         abort(400, message="Bad request, Ensure 'store_id' ,'name', 'price' are included in json payload")
 
-    if item_data["store_id"] not in stores:
-        abort (404, message="store not found")
+    for item in items.values():
+        if (item["name"] == item_data["name"] and item["store_id"] == item_data["store_id"]):
+            abort(400, message+"item already exists")
+
     item_id = uuid.uuid4().hex
     item = {**item_data, "id":item_id}
-    item[item_id]= item
+    items[item_id]= item
     return item
 
 @app.get("/item")
