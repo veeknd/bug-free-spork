@@ -1,6 +1,6 @@
 from flask import Flask, request
 from db import stores,items
-from flask-smorest import abort
+from flask_smorest import abort
 app = Flask(__name__)
 import uuid
 
@@ -56,3 +56,33 @@ def get_store(store_id):
     except KeyError:
 
         abort(404, message="Store not found.")
+
+@app.delete("/store/<string:store_id>")
+def delete_store(store_id):
+    try:
+        del stores[store_id]
+        return {"message": "store was deleted"}
+    except KeyError:
+        abort(404, message="store not found")
+
+@app.delete("/item/<string:item_id>")
+def delete_item(item_id):
+    try:
+        del item[item_id]
+        return {"message":"item was deleted"}
+    except KeyError:
+        abort(404,message="item not found")
+
+
+@app.put("/item/<string:item_id>")
+def update_item(item_id):
+    item_data = request.get_json()
+    if "price" not in item_data or "name" not in item_data:
+        abort(400, message="Bad request, ensure 'name' or 'price' is added in json payload")
+    try:
+        item = items[item_id]
+        item |= item_data
+
+        return item
+    except KeyError:
+        abort(404, message="item not found") 
