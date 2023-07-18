@@ -42,7 +42,7 @@ def get_all_items():
     return {"items": list(items.values())}
 
 @app.get("/item/<string:item_id>")
-def get_store(item_id):
+def get_item(item_id):
     try:
         return item[item_id]
     except KeyError:
