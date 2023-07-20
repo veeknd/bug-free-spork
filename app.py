@@ -1,8 +1,10 @@
 from flask import Flask, request
 from db import stores,items
 from flask_smorest import abort
-app = Flask(__name__)
 import uuid
+
+app = Flask(__name__)
+
 
 @app.get("/store")
 def get_stores():
